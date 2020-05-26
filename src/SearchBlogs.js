@@ -6,7 +6,6 @@ import SearchBar from './SearchBar';
 const SearchBlogs = ({props,location})=>{
     const tags=location.state.tags;
     const blogList  = blogs.filter(e=>check(e));
-    console.log(blogList);
 
     function check(blog){
         let res=true;

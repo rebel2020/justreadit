@@ -32,7 +32,6 @@ class BlogDetails extends React.Component{
 			</div>
 		)
 		const {title,author,image,content} = blog;
-		console.log(blog);
 		return (
 			<div>
 			<img src={image!=null?image:defaultImage} className="logo"/>

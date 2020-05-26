@@ -43,7 +43,6 @@ const App = ()=>{
         </Link>
         </li>
         </ul>
-        <Data></Data>
         <Router>
         <WriteBlog path='/write'/>
         <AddBlog path="/add"/>

@@ -30,7 +30,7 @@ class Blog extends React.Component{
                         <div className="blog">
                         <a href={`/blog/${blog._id}`} onClick={e=>{e.preventDefault();navigate(`/blog/${blog._id}`)}} >
                         <div >
-                        <img src={blog.img} className="logo"></img>
+                        <img src={blog.image} className="logo"></img>
                         <h1>{blog.title}</h1>
                         </div>
                         </a>

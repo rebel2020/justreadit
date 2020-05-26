@@ -71,7 +71,7 @@ class SearchBar extends React.Component{
                 this.state.blogs.map(blog=>{
                     return (
                         <div className="blog">
-                            <Link to={`/blog/${blog.id}`}><h1>{blog.title}</h1></Link>
+                            <Link to={`/blog/${blog._id}`}><h1>{blog.title}</h1></Link>
                             <h2>{blog.author}</h2>
                         </div>
                     )

@@ -13,7 +13,6 @@ class Blog extends React.Component{
         }
 	}
     async componentDidMount(){
-        console.log(this.state);
         await this.setState({
             title:this.state.props.state.title,
             authorName:this.state.props.state.name,
@@ -21,7 +20,6 @@ class Blog extends React.Component{
             email:this.state.props.state.email,
             image:this.state.props.state.image,
         })
-        console.log(this.state);
     }
 
     async isNewAuthor(){
@@ -45,8 +43,10 @@ class Blog extends React.Component{
         const temp = await axios.post(url1,{blog:{title:title,tags:tags,author:authorName,aId:ObjectID(aId),content:content,image:image}}).then(response=>response.data);
         if(temp.status)
         navigate(`/blog/${temp._id}`);
-        else
-        console.log("Could not save");
+        else{
+            console.log("Could not save");
+            document.getElementById("couldNotSave").innerHTML="Soory... could not save the blog please try again"
+        }
         return temp.status;
     }
 
@@ -55,7 +55,6 @@ class Blog extends React.Component{
         if(tempAuthor==null)
         {
             const aId = await this.addNewAuthor();
-            console.log(aId);
             return aId;
         }
         return tempAuthor._id;
@@ -64,7 +63,8 @@ class Blog extends React.Component{
     render(){
         const {content} =this.state;
         return (
-            <div className="textarea-container">
+            <div className="textarea-container" >
+                <h2 id="couldNotSave" style={{color:'red'}}></h2>
                 <form onSubmit={e=>this.saveBlog(e)}>
                     <textarea id="area" placeholder="Start writing your blog" value={content} onChange={e=>{this.setState({content:e.target.value});document.getElementById('arsh').innerHTML=
                         document.getElementById("area").value.replace(/\n/g,'<br />')}}></textarea>
