@@ -1,0 +1,79 @@
+.header{
+    font-style: italic;
+    font-weight: 600;
+    font-size: xx-large;
+    display: inline-block;
+}
+.blog{
+    background-color: rgb(220, 220, 220);
+    font-style: italic;
+    margin-bottom: 40px;
+}
+.logo {
+	width: 100px;
+	height: 100px;
+}
+ul {
+    position: sticky;
+    top: 6px;
+    background-color: cadetblue;
+}
+li {
+    list-style-type: none;
+    margin-right: 11%;
+    padding: 0;
+    display: inline-block;
+    vertical-align: top;
+}
+.navbar{
+    font-style: italic;
+    font-weight: 600;
+    font-size: xx-large;
+    display: inline-block;
+}
+.buttonActive{
+    padding: 5px 12px;
+    margin-left: 5px;
+    background-color: cornflowerblue;
+}
+.buttonInactive{
+    padding: 2px 5px;
+    margin-left: 5px;
+}
+.submit{
+    background-color: peru;
+    font-size: 20px;
+    margin-top: 5px;
+    margin-left: 8px;
+    padding: 2px 15px;
+}
+textarea{
+    margin-left: 2%;
+    width: 96%;
+    height: 95px;
+    padding: 10px 20px;
+    position: fixed;
+    top: 45px;
+    border-radius: 15px;
+}
+input{
+    border-radius: 5px;
+}
+.textarea-container button{
+    position: fixed;
+    top: 45px;
+    right: 2.5%;
+}
+button{
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.writeBlog{
+    background-color: rgb(220, 220, 220);
+    font-style: italic;
+    margin-top: 110px;
+}
+label{
+    margin-right: 5px;
+    margin-left: 30px;
+}
