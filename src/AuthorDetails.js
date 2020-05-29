@@ -40,8 +40,5 @@ class AuthorDetails extends React.Component{
 			</div>
 		)
 	}
-
-
-
 }
 export default AuthorDetails;
