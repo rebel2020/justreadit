@@ -11,10 +11,19 @@ import SearchBar from './SearchBar';
 import AddBlog from './AddBlog';
 import WriteBlog from './WriteBlog';
 import {Data} from './Data';
-import Test from './SearchB';
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
+
+
+
+const client = new ApolloClient({
+    uri:'http://localhost:4000/graphql'
+});
+
 
 const App = ()=>{
     return (
+        <ApolloProvider client={client}>
         <div>
         <ul >
         <li>
@@ -47,7 +56,6 @@ const App = ()=>{
         <WriteBlog path='/write'/>
         <AddBlog path="/add"/>
         <SearchBar path="/search"></SearchBar>
-        <Test path="/test"></Test>
         <SearchBlogs path="/searchblogs"></SearchBlogs>
         <AuthorBlogs path='/authorblogs/:id'/>
         <AuthorDetails path='/author/:id'/>
@@ -56,6 +64,7 @@ const App = ()=>{
         <Author path="/authors"/>
         </Router>
         </div>
+        </ApolloProvider>
     );
 }
 render(<App/>,document.getElementById("root"));

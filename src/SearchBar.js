@@ -1,6 +1,9 @@
 import React from 'react';
 import {url} from './Data';
 import {Link} from '@reach/router';
+import {searchBarQuery}  from './queries'
+import { graphql } from 'react-apollo';
+
 
 class SearchBar extends React.Component{
     constructor(props){
@@ -10,10 +13,11 @@ class SearchBar extends React.Component{
             tagstates:[],
             blogs:[],
             allBlogs:[],
-            searchTags:[]
+            searchTags:[],
+            loaded:false,
         }
     }
-    async componentDidMount(){
+/*    async componentDidMount(){
         const tagList =await fetch(`${url}/tags`).then(response=>response.json());
         const blogList =await fetch(`${url}/blogs`).then(response=>response.json());
         this.setState({
@@ -22,12 +26,8 @@ class SearchBar extends React.Component{
             blogs:blogList,
             allBlogs:blogList,
         })
-/*        console.log(this.state.tags);
-        console.log(this.state.tagstates);
-        console.log(this.state.blogs);
-        console.log(this.state);*/
     }
-
+*/
     async search(e){
         e.preventDefault();
         const temp=this.state.tagstates.filter(e=>e.state).map(tag=>tag.tag);
@@ -43,7 +43,7 @@ class SearchBar extends React.Component{
         const {searchTags} = this.state;
         let res=true;
         for(var i=0;i<searchTags.length;i++){
-            res=blog.tags.find(e=>e==searchTags[i])!=null;
+            res=blog.tags.find(e=>e.tag==searchTags[i])!=null;
             if(res==false)
             {
                 return false;
@@ -52,7 +52,38 @@ class SearchBar extends React.Component{
         return true;
     }
 
+    updateState(data) {
+        const tagList = data.tags;
+        const blogList = data.blogs;
+        this.setState({
+            loaded:true,
+            tags:tagList.map(tag=>tag.tag),
+            tagstates:tagList.map(tag=>{return {tag:tag.tag,state:false}}),
+            blogs:blogList,
+            allBlogs:blogList,
+        })        
+    }
+
     render(){
+        const data= this.props.data;
+        if(data.loading){
+            return (
+                <div>Loading Please wait...</div>
+            )
+        }
+        if(!this.state.loaded)
+        {
+            this.updateState(data);
+/*            const tagList = data.tags;
+            const blogList = data.blogs;
+            this.setState({
+                loaded:true,
+                tags:tagList.map(tag=>tag.tag),
+                tagstates:tagList.map(tag=>{return {tag:tag.tag,state:false}}),
+                blogs:blogList,
+                allBlogs:blogList,
+            })*/
+        }
         const {tagstates} = this.state;
         return(
         <div>
@@ -71,8 +102,8 @@ class SearchBar extends React.Component{
                 this.state.blogs.map(blog=>{
                     return (
                         <div className="blog">
-                            <Link to={`/blog/${blog._id}`}><h1>{blog.title}</h1></Link>
-                            <h2>{blog.author}</h2>
+                            <Link to={`/blog/${blog.id}`}><h1>{blog.title}</h1></Link>
+                            <h2>{blog.author.name}</h2>
                         </div>
                     )
                 })
@@ -82,4 +113,4 @@ class SearchBar extends React.Component{
         )
     }
 }
-export default SearchBar;
+export default graphql(searchBarQuery)(SearchBar);

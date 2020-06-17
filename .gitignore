@@ -1,4 +1,5 @@
 dist
 .cache
 node_modules
-graphql
+server/node_modules
+server/.DS_Store

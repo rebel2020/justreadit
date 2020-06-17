@@ -2,7 +2,10 @@ import React,{useState} from 'react';
 import { url, authors } from './Data';
 import { navigate } from '@reach/router';
 import { ObjectID } from 'mongodb';
+import { graphql } from 'react-apollo';
 const axios = require('axios');
+import {addBlogMutation, authorByEmailQuery, addAuthorMutation} from './queries';
+import {flowRight as compose } from 'lodash';
 
 class Blog extends React.Component{
     constructor(props){
@@ -23,22 +26,49 @@ class Blog extends React.Component{
     }
 
     async isNewAuthor(){
-        const url1=`${url}/author_by_email/${this.state.email}`;
-        const author = await fetch(url1).then(response=>response.json());
+        const author = this.props.authorByEmailQuery.authorByEmail;
         return author;
+/*        const url1=`${url}/author_by_email/${this.state.email}`;
+        const author = await fetch(url1).then(response=>response.json());
+        return author;*/
     }
 
     async addNewAuthor(){
-        const url1=`${url}/addauthor`;
-        const {email,authorName}=this.state;
-        const temp =await axios.post(url1,{author:{email:email,name:authorName}}).then(response=>response.data);
-        return temp.status._id;    
+        const data=await this.props.addAuthorMutation({
+                    variables:{
+                        name:this.state.authorName,
+                        email:this.state.email
+                    }
+        });
+        if(data==null||data.data==null)
+        return -1;
+        return data.data.addAuthor.id;
     }
 
     async saveBlog(e){
         e.preventDefault();
+
+
+
         const aId =await this.addAuthor();
-        const url1=`${url}/addblog`;
+        const data=await this.props.addBlogMutation({
+            variables:{
+                title:this.state.title,
+                tags:this.state.tags,
+                aId:aId,
+                content:this.state.content,
+                image:this.state.image
+            }
+        })
+        if(data==null||data.data==null){
+            document.getElementById("couldNotSave").innerHTML="Soory... could not save the blog please try again";
+        }
+        else
+        {
+            navigate(`/blog/${data.data.addBlog.id}`);
+        }
+        return;
+/*        const url1=`${url}/addblog`;
         const {tags,title,authorName,content,image}=this.state;
         const temp = await axios.post(url1,{blog:{title:title,tags:tags,author:authorName,aId:ObjectID(aId),content:content,image:image}}).then(response=>response.data);
         if(temp.status)
@@ -47,7 +77,7 @@ class Blog extends React.Component{
             console.log("Could not save");
             document.getElementById("couldNotSave").innerHTML="Soory... could not save the blog please try again"
         }
-        return temp.status;
+        return temp.status;*/
     }
 
     async addAuthor(){
@@ -57,7 +87,7 @@ class Blog extends React.Component{
             const aId = await this.addNewAuthor();
             return aId;
         }
-        return tempAuthor._id;
+        return tempAuthor.id;
     }
 
     render(){
@@ -75,4 +105,16 @@ class Blog extends React.Component{
         )    
     }
 }
-export default Blog;
+export default compose(
+    graphql(addBlogMutation,{name:"addBlogMutation"}),
+    graphql(authorByEmailQuery,{name:"authorByEmailQuery",
+    options:(props)=>{
+        return {
+            variables:{
+                email:props.location.state.email
+            }
+        }
+    }
+    }),
+    graphql(addAuthorMutation,{name:"addAuthorMutation"})
+)(Blog);
